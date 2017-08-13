@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TagView">
+        <attr name="bg_radius" format="dimension"/>
+        <attr name="bg_alpha" format="integer" />
+        <attr name="bg_color" format="color" />
+    </declare-styleable>
+
+</resources>
