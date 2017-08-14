@@ -190,11 +190,84 @@ public class TagView extends ViewGroup {
             throw new RuntimeException("listener is null");
         this.listener=listener;
     }
+
+    public OnClickListener getListener(){
+        return listener;
+    }
+
     public void addBefore(before bf){
         this.bf=bf;
     }
+
+    public before getBefore(){
+        return bf;
+    }
+
+    public float getBg_border_width() {
+        return bg_border_width;
+    }
+
+    public void setBg_border_width(float bg_border_width) {
+        this.bg_border_width = bg_border_width;
+    }
+
+    public int getBg_alpha() {
+        return bg_alpha;
+    }
+
+    public void setBg_alpha(int bg_alpha) {
+        this.bg_alpha = bg_alpha;
+    }
+
+    public int getBg_color() {
+        return bg_color;
+    }
+
+    public void setBg_color(int bg_color) {
+        this.bg_color = bg_color;
+    }
+
+    public float getBg_radius() {
+        return bg_radius;
+    }
+
+    public void setBg_radius(float bg_radius) {
+        this.bg_radius = bg_radius;
+    }
+
+    public int getMbottom() {
+        return mbottom;
+    }
+
+    public void setMbottom(int mbottom) {
+        this.mbottom = mbottom;
+    }
+
+    public int getMleft() {
+        return mleft;
+    }
+
+    public void setMleft(int mleft) {
+        this.mleft = mleft;
+    }
+
+    public int getMright() {
+        return mright;
+    }
+
+    public void setMright(int mright) {
+        this.mright = mright;
+    }
+
+    public int getMtop() {
+        return mtop;
+    }
+
+    public void setMtop(int mtop) {
+        this.mtop = mtop;
+    }
+
     interface before{
         public void execute(TextView v);
-
     }
 }
