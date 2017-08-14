@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 public class TagView extends ViewGroup {
 
     float bg_radius;
+    float bg_border_width;
     int bg_color;
     int bg_alpha;
     Paint p=new Paint();
@@ -39,7 +40,7 @@ public class TagView extends ViewGroup {
             bg_radius = attr.getDimension(R.styleable.TagView_bg_radius,5);
             bg_alpha = attr.getInteger(R.styleable.TagView_bg_alpha,100);
             bg_color = attr.getColor(R.styleable.TagView_bg_color,Color.parseColor("#FFCCCC"));
-
+            bg_border_width=attr.getFloat(R.styleable.TagView_bg_radius,1);
 
         } catch (Exception e) {
 
@@ -49,10 +50,9 @@ public class TagView extends ViewGroup {
 
             attr.recycle();
         }
+        setWillNotDraw(false);
         p = new Paint();
-        p.setStyle(Paint.Style.FILL);
         p.setColor(bg_color);
-        p.setAlpha(bg_alpha);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TagView extends ViewGroup {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-
+       // Log.i("Unit","widthsize"+String.valueOf(widthSize));
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
         int num = getChildCount();
@@ -82,7 +82,7 @@ public class TagView extends ViewGroup {
                 width = lPadding + rPadding + c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin;
                 if (height + c.getHeight() + mp.topMargin + mp.bottomMargin > heightSize)
                     break;
-                height += c.getHeight() + mp.topMargin + mp.bottomMargin;
+                height += c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin;
             } else {
                 width += c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin;
             }
@@ -128,7 +128,16 @@ public class TagView extends ViewGroup {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(0,0,getWidth(),getHeight(),p);
+
+        p.setAlpha(255);
+        p.setStrokeWidth(bg_border_width);
+        p.setStyle(Paint.Style.STROKE);
+        canvas.drawRoundRect(0,0,getWidth(),getHeight(),bg_radius,bg_radius,p);
+
+        p.setStyle(Paint.Style.FILL);
+        p.setAlpha(bg_alpha);
+        canvas.drawRoundRect(0,0,getWidth(),getHeight(),bg_radius,bg_radius,p);
+
     }
 
     @Override

@@ -14,67 +14,76 @@
     android:id="@+id/tag"
     android:padding="10dp"
     app:bg_alpha="100"
-    app:bg_color="#6666cc"
-    app:bg_radius="30dp"
+    app:bg_color="#ffcccc"
+    app:bg_radius="10dp"
+    app:bg_border_width="3.0"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <TextView
-        android:padding="10dp"
+
         android:layout_margin="5dp"
-        android:background="#99CCCC"
+        android:background="@drawable/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello" />
     <TextView
-        android:padding="10dp"
-        android:background="#99CCCC"
+
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello world" />
+        android:text="world" />
 
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello world" />
+        android:text="Google" />
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello world" />
+        android:text="Apple" />
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello world" />
+        android:text="Amazon" />
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello world" />
+        android:text="NIKE" />
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
+
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this is" />
+        android:text="Retrofit" />
     <TextView
-        android:background="#99CCCC"
-        android:padding="10dp"
+        android:background="@drawable/text"
         android:layout_margin="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Facebook" />
+    <TextView
+        android:background="@drawable/text"
+
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eventbus" />
+    <TextView
+        android:background="@drawable/text"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RxJava" />
 
     </com.dingdangmao.tagview.TagView>
 </RelativeLayout>
