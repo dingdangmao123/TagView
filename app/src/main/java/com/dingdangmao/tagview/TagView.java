@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * Created by suxiaohui on 2017/8/13.
@@ -17,18 +18,23 @@ import android.view.ViewGroup;
 
 public class TagView extends ViewGroup {
 
-    float bg_radius;
-    float bg_border_width;
-    int bg_color;
-    int bg_alpha;
-    Paint p=new Paint();
+    private float bg_radius;
+    private float bg_border_width;
+    private int bg_color;
+    private int bg_alpha;
+    private int mleft;
+    private int mright;
+    private int mtop;
+    private int mbottom;
+    private OnClickListener listener;
+    private Paint p = new Paint();
 
     public TagView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public TagView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public TagView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -37,14 +43,22 @@ public class TagView extends ViewGroup {
 
         try {
 
-            bg_radius = attr.getDimension(R.styleable.TagView_bg_radius,5);
-            bg_alpha = attr.getInteger(R.styleable.TagView_bg_alpha,100);
-            bg_color = attr.getColor(R.styleable.TagView_bg_color,Color.parseColor("#FFCCCC"));
-            bg_border_width=attr.getFloat(R.styleable.TagView_bg_radius,1);
+            bg_radius = attr.getDimension(R.styleable.TagView_bg_radius, 5);
+            bg_alpha = attr.getInteger(R.styleable.TagView_bg_alpha, 100);
+            bg_color = attr.getColor(R.styleable.TagView_bg_color, Color.parseColor("#FFCCCC"));
+            bg_border_width = attr.getFloat(R.styleable.TagView_bg_radius, 1);
+
+            mleft =  10;//(int)attr.getFloat(R.styleable.TagView_mleft, 10.0f);
+            mright = 10;//(int)attr.getFloat(R.styleable.TagView_mright, 10.0f);
+            mtop =   10;//(int)attr.getFloat(R.styleable.TagView_mtop, 10.0f);
+            mbottom =10;//(int)attr.getFloat(R.styleable.TagView_mbottom, 10.0f);
+
+
+            Log.i("Unit","init"+String.valueOf(mleft)+String.valueOf(mtop));
 
         } catch (Exception e) {
 
-            Log.i("Unit", e.toString());
+            Log.i("Unit","init "+e.toString());
 
         } finally {
 
@@ -62,7 +76,7 @@ public class TagView extends ViewGroup {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-       // Log.i("Unit","widthsize"+String.valueOf(widthSize));
+        // Log.i("Unit","widthsize"+String.valueOf(widthSize));
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
         int num = getChildCount();
@@ -77,14 +91,13 @@ public class TagView extends ViewGroup {
         for (int i = 0; i < num; i++) {
             View c = getChildAt(i);
 
-            MarginLayoutParams mp = (MarginLayoutParams) c.getLayoutParams();
-            if (width + c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin > widthSize) {
-                width = lPadding + rPadding + c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin;
-                if (height + c.getHeight() + mp.topMargin + mp.bottomMargin > heightSize)
+            if (width + c.getMeasuredWidth() + mleft + mright > widthSize) {
+                width = lPadding + rPadding + c.getMeasuredWidth() + mleft + mright;
+                if (height + c.getHeight() + mtop + mbottom > heightSize)
                     break;
-                height += c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin;
+                height += c.getMeasuredHeight() + mtop + mbottom;
             } else {
-                width += c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin;
+                width += c.getMeasuredWidth() + mleft + mright;
             }
         }
         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? widthSize
@@ -108,19 +121,20 @@ public class TagView extends ViewGroup {
 
         for (int i = 0; i < num; i++) {
             View c = getChildAt(i);
-            MarginLayoutParams mp = (MarginLayoutParams) c.getLayoutParams();
-            if (cw + c.getMeasuredWidth() + mp.leftMargin + mp.rightMargin > right) {
-                if (ch + c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin > bottom)
+            Log.i("Unit", ((TextView) c).getText().toString());
+
+            if (cw + c.getMeasuredWidth() + mleft + mright > right) {
+                if (ch + c.getMeasuredHeight() + mtop + mbottom > bottom)
                     break;
-                cw = lPadding + mp.leftMargin + c.getMeasuredWidth();
-                ch += mp.topMargin + mp.bottomMargin + c.getMeasuredHeight();
-                c.layout(lPadding + mp.leftMargin, ch + mp.topMargin, cw, ch + mp.topMargin + c.getMeasuredHeight());
-                cw += mp.rightMargin;
+                cw = lPadding + mleft + c.getMeasuredWidth();
+                ch += mtop + mbottom + c.getMeasuredHeight();
+                c.layout(lPadding + mleft, ch + mtop, cw, ch + mtop + c.getMeasuredHeight());
+                cw += mright;
             } else {
-                c.layout(cw + mp.leftMargin, ch + mp.topMargin, cw + mp.leftMargin + c.getMeasuredWidth(), ch + c.getMeasuredHeight() + mp.topMargin);
-                cw = cw + mp.leftMargin + mp.rightMargin + c.getMeasuredWidth();
-                Log.i("Unit", String.valueOf(c.getMeasuredHeight()));
-                Log.i("Unit", String.valueOf(ch + c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin));
+                c.layout(cw + mleft, ch + mtop, cw + mleft + c.getMeasuredWidth(), ch + c.getMeasuredHeight() + mtop);
+                cw = cw + mleft + mright + c.getMeasuredWidth();
+                //Log.i("Unit", String.valueOf(c.getMeasuredHeight()));
+                //Log.i("Unit", String.valueOf(ch + c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin));
             }
         }
     }
@@ -132,18 +146,48 @@ public class TagView extends ViewGroup {
         p.setAlpha(255);
         p.setStrokeWidth(bg_border_width);
         p.setStyle(Paint.Style.STROKE);
-        canvas.drawRoundRect(0,0,getWidth(),getHeight(),bg_radius,bg_radius,p);
+        canvas.drawRoundRect(0, 0, getWidth(), getHeight(), bg_radius, bg_radius, p);
 
         p.setStyle(Paint.Style.FILL);
         p.setAlpha(bg_alpha);
-        canvas.drawRoundRect(0,0,getWidth(),getHeight(),bg_radius,bg_radius,p);
+        canvas.drawRoundRect(0, 0, getWidth(), getHeight(), bg_radius, bg_radius, p);
 
     }
+    public void addTag(String[] tag){
+        if(tag.length==0)
+            return ;
+        for(int i=0;i<tag.length;i++) {
+            TextView tv = new TextView(getContext(), null);
+            tv.setClickable(true);
+            if(listener!=null)
+                tv.setOnClickListener(listener);
+            tv.setText(tag[i]);
+            before(tv);
+            addView(tv);
+        }
+    }
+    public void setTag(String[] tag){
 
-    @Override
-    public LayoutParams generateLayoutParams(AttributeSet attrs) {
-
-        return new MarginLayoutParams(getContext(), attrs);
-
+        if(tag.length==0)
+            return ;
+        removeAllViews();
+        for(int i=0;i<tag.length;i++) {
+            TextView tv = new TextView(getContext(), null);
+            tv.setClickable(true);
+            if(listener!=null)
+                tv.setOnClickListener(listener);
+            tv.setText(tag[i]);
+            before(tv);
+            addView(tv);
+        }
+    }
+    public void addListener(OnClickListener listener){
+        if(listener==null)
+            throw new RuntimeException("listener is null");
+        this.listener=listener;
+    }
+    public void before(TextView v){
+        v.setBackgroundColor(Color.parseColor("#99cccc"));
+        v.setPadding(10,10,10,10);
     }
 }
