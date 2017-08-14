@@ -26,6 +26,7 @@ public class TagView extends ViewGroup {
     private int mright;
     private int mtop;
     private int mbottom;
+    private before bf;
     private OnClickListener listener;
     private Paint p = new Paint();
 
@@ -42,19 +43,15 @@ public class TagView extends ViewGroup {
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.TagView, defStyleAttr, 0);
 
         try {
-
             bg_radius = attr.getDimension(R.styleable.TagView_bg_radius, 5);
             bg_alpha = attr.getInteger(R.styleable.TagView_bg_alpha, 100);
             bg_color = attr.getColor(R.styleable.TagView_bg_color, Color.parseColor("#FFCCCC"));
-            bg_border_width = attr.getFloat(R.styleable.TagView_bg_radius, 1);
+            bg_border_width = attr.getFloat(R.styleable.TagView_bg_border_width, 1);
 
-            mleft =  10;//(int)attr.getFloat(R.styleable.TagView_mleft, 10.0f);
-            mright = 10;//(int)attr.getFloat(R.styleable.TagView_mright, 10.0f);
-            mtop =   10;//(int)attr.getFloat(R.styleable.TagView_mtop, 10.0f);
-            mbottom =10;//(int)attr.getFloat(R.styleable.TagView_mbottom, 10.0f);
-
-
-            Log.i("Unit","init"+String.valueOf(mleft)+String.valueOf(mtop));
+            mleft =  (int)attr.getDimension(R.styleable.TagView_mleft, 10.0f);
+            mright = (int)attr.getDimension(R.styleable.TagView_mright, 10.0f);
+            mtop =   (int)attr.getDimension(R.styleable.TagView_mtop, 5.0f);
+            mbottom =(int)attr.getDimension(R.styleable.TagView_mbottom, 5.0f);
 
         } catch (Exception e) {
 
@@ -76,7 +73,7 @@ public class TagView extends ViewGroup {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        // Log.i("Unit","widthsize"+String.valueOf(widthSize));
+
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
         int num = getChildCount();
@@ -157,14 +154,20 @@ public class TagView extends ViewGroup {
         if(tag.length==0)
             return ;
         for(int i=0;i<tag.length;i++) {
-            TextView tv = new TextView(getContext(), null);
-            tv.setClickable(true);
-            if(listener!=null)
-                tv.setOnClickListener(listener);
-            tv.setText(tag[i]);
-            before(tv);
-            addView(tv);
+           addTagString(tag[i]);
         }
+    }
+    public void addTagString(String tag){
+        if(tag==null)
+            return ;
+        TextView tv = new TextView(getContext(), null);
+        tv.setClickable(true);
+        if(listener!=null)
+            tv.setOnClickListener(listener);
+        tv.setText(tag);
+        if(bf!=null)
+            bf.execute(tv);
+        addView(tv);
     }
     public void setTag(String[] tag){
 
@@ -177,7 +180,8 @@ public class TagView extends ViewGroup {
             if(listener!=null)
                 tv.setOnClickListener(listener);
             tv.setText(tag[i]);
-            before(tv);
+            if(bf!=null)
+                bf.execute(tv);
             addView(tv);
         }
     }
@@ -186,8 +190,11 @@ public class TagView extends ViewGroup {
             throw new RuntimeException("listener is null");
         this.listener=listener;
     }
-    public void before(TextView v){
-        v.setBackgroundColor(Color.parseColor("#99cccc"));
-        v.setPadding(10,10,10,10);
+    public void addBefore(before bf){
+        this.bf=bf;
+    }
+    interface before{
+        public void execute(TextView v);
+
     }
 }

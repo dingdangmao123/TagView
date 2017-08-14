@@ -2,7 +2,6 @@ package com.dingdangmao.tagview;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,12 +17,19 @@ public class Main extends AppCompatActivity {
         tag.addListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Unit","click");
                 TextView tv=(TextView)v;
                 Toast.makeText(Main.this,((TextView) v).getText().toString(),Toast.LENGTH_SHORT).show();
-                tag.removeView(v);
+            }
+        });
+        tag.addBefore(new TagView.before() {
+            @Override
+            public void execute(TextView v) {
+                v.setBackgroundResource(R.drawable.text);
             }
         });
         tag.addTag(new String[]{"java","c++","c#","Python"});
+        tag.addTagString("hello");
+        tag.addTagString("world");
+        tag.addTagString("just do it");
     }
 }

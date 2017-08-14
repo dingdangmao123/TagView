@@ -5,10 +5,10 @@
         <attr name="bg_alpha" format="integer" />
         <attr name="bg_color" format="color" />
         <attr name="bg_border_width" format="float"/>
-        <attr name="mleft"   format="float"/>
-        <attr name="mright"  format="float"/>
-        <attr name="mtop"    format="float"/>
-        <attr name="mbottom" format="float"/>
+        <attr name="mleft"   format="dimension"/>
+        <attr name="mright"  format="dimension"/>
+        <attr name="mtop"    format="dimension"/>
+        <attr name="mbottom" format="dimension"/>
     </declare-styleable>
 
 </resources>

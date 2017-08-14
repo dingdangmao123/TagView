@@ -12,9 +12,12 @@
     tools:context="com.dingdangmao.tagview.Main">
 <com.dingdangmao.tagview.TagView
     android:id="@+id/tag"
-    app:mleft="20"
-    app:mright="20"
+    app:mleft="10dp"
+    app:mright="10dp"
+    app:mtop="5dp"
+    app:mbottom="5dp"
     app:bg_alpha="100"
+    app:bg_radius="10dp"
     app:bg_color="#ffcccc"
     app:bg_border_width="3.0"
     android:layout_width="match_parent"
