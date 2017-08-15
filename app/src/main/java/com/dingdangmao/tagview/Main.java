@@ -28,8 +28,10 @@ public class Main extends AppCompatActivity {
             }
         });
         tag.addTag(new String[]{"java","c++","c#","Python"});
-        tag.addTagString("hello");
-        tag.addTagString("world");
-        tag.addTagString("just do it");
+        tag.addTagString("Apple");
+        tag.addTagString("Facebook");
+        tag.addTagString("Amazon");
+        tag.addTagString("the sky full of stars");
+
     }
 }

@@ -64,6 +64,7 @@ public class TagView extends ViewGroup {
         setWillNotDraw(false);
         p = new Paint();
         p.setColor(bg_color);
+
     }
 
     @Override
@@ -75,20 +76,21 @@ public class TagView extends ViewGroup {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
         measureChildren(widthMeasureSpec, heightMeasureSpec);
-
+        int maxWidth=0;
         int num = getChildCount();
         int lPadding = getPaddingLeft();
         int rPadding = getPaddingRight();
         int tPadding = getPaddingTop();
         int bPadding = getPaddingBottom();
 
-        int height = tPadding + bPadding;
+        int height = tPadding + bPadding+getChildAt(0).getMeasuredHeight()+mtop+mbottom;
         int width = lPadding + rPadding;
 
         for (int i = 0; i < num; i++) {
             View c = getChildAt(i);
 
             if (width + c.getMeasuredWidth() + mleft + mright > widthSize) {
+                maxWidth=Math.max(width,maxWidth);
                 width = lPadding + rPadding + c.getMeasuredWidth() + mleft + mright;
                 if (height + c.getHeight() + mtop + mbottom > heightSize)
                     break;
@@ -97,8 +99,10 @@ public class TagView extends ViewGroup {
                 width += c.getMeasuredWidth() + mleft + mright;
             }
         }
+        maxWidth=Math.max(width,maxWidth);
+       // Log.i("Unit",String.valueOf(height)+" "+String.valueOf(heightSize));
         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? widthSize
-                : width, (heightMode == MeasureSpec.EXACTLY) ? heightSize
+                : maxWidth, (heightMode == MeasureSpec.EXACTLY) ? heightSize
                 : height);
     }
 
@@ -118,7 +122,7 @@ public class TagView extends ViewGroup {
 
         for (int i = 0; i < num; i++) {
             View c = getChildAt(i);
-            Log.i("Unit", ((TextView) c).getText().toString());
+           // Log.i("Unit", ((TextView) c).getText().toString());
 
             if (cw + c.getMeasuredWidth() + mleft + mright > right) {
                 if (ch + c.getMeasuredHeight() + mtop + mbottom > bottom)
@@ -130,8 +134,6 @@ public class TagView extends ViewGroup {
             } else {
                 c.layout(cw + mleft, ch + mtop, cw + mleft + c.getMeasuredWidth(), ch + c.getMeasuredHeight() + mtop);
                 cw = cw + mleft + mright + c.getMeasuredWidth();
-                //Log.i("Unit", String.valueOf(c.getMeasuredHeight()));
-                //Log.i("Unit", String.valueOf(ch + c.getMeasuredHeight() + mp.topMargin + mp.bottomMargin));
             }
         }
     }
