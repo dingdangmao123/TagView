@@ -1,5 +1,6 @@
 # TagView
  TagView is a simple android flow tag viewgroup
+ You can add new view when you provide strings and also drag the subordinate view 
  
 # snap
 ![TagView](/snap/demo.PNG)
@@ -34,12 +35,23 @@
                 Toast.makeText(Main.this,((TextView) v).getText().toString(),Toast.LENGTH_SHORT).show();
             }
         });
+        
+        /*
+        you can add this to set style of view
+        */
+        
         tag.addBefore(new TagView.before() {
             @Override
             public void execute(TextView v) {
                 v.setBackgroundResource(R.drawable.text);
             }
         });
+        
+        /*
+        addtag - add the tag
+        settag - set the tagthe former will be deleted）
+        */
+        
         tag.addTag(new String[]{"java","c++","c#","Python"});
         tag.addTagString("Apple");
         tag.addTagString("Facebook");
