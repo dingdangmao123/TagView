@@ -6,8 +6,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,8 +31,11 @@ public class TagView extends ViewGroup {
     private int mtop;
     private int mbottom;
     private before bf;
+    private ViewDragHelper help;
     private OnClickListener listener;
     private Paint p = new Paint();
+    private Handler hld=new Handler();
+
 
     public TagView(Context context) {
         this(context, null);
@@ -43,6 +50,7 @@ public class TagView extends ViewGroup {
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.TagView, defStyleAttr, 0);
 
         try {
+
             bg_radius = attr.getDimension(R.styleable.TagView_bg_radius, 5);
             bg_alpha = attr.getInteger(R.styleable.TagView_bg_alpha, 100);
             bg_color = attr.getColor(R.styleable.TagView_bg_color, Color.parseColor("#FFCCCC"));
@@ -64,7 +72,7 @@ public class TagView extends ViewGroup {
         setWillNotDraw(false);
         p = new Paint();
         p.setColor(bg_color);
-
+        help=ViewDragHelper.create(this,call);
     }
 
     @Override
@@ -100,7 +108,6 @@ public class TagView extends ViewGroup {
             }
         }
         maxWidth=Math.max(width,maxWidth);
-       // Log.i("Unit",String.valueOf(height)+" "+String.valueOf(heightSize));
         setMeasuredDimension((widthMode == MeasureSpec.EXACTLY) ? widthSize
                 : maxWidth, (heightMode == MeasureSpec.EXACTLY) ? heightSize
                 : height);
@@ -122,8 +129,6 @@ public class TagView extends ViewGroup {
 
         for (int i = 0; i < num; i++) {
             View c = getChildAt(i);
-           // Log.i("Unit", ((TextView) c).getText().toString());
-
             if (cw + c.getMeasuredWidth() + mleft + mright > right) {
                 if (ch + c.getMeasuredHeight() + mtop + mbottom > bottom)
                     break;
@@ -150,7 +155,6 @@ public class TagView extends ViewGroup {
         p.setStyle(Paint.Style.FILL);
         p.setAlpha(bg_alpha);
         canvas.drawRoundRect(0, 0, getWidth(), getHeight(), bg_radius, bg_radius, p);
-
     }
     public void addTag(String[] tag){
         if(tag.length==0)
@@ -271,5 +275,112 @@ public class TagView extends ViewGroup {
 
     interface before{
         public void execute(TextView v);
+    }
+
+    static class Position{
+        private int x;
+        private int y;
+        private Position(int x,int y){
+            this.x=x;
+            this.y=y;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+    }
+    private ViewDragHelper.Callback call=new ViewDragHelper.Callback(){
+
+        @Override
+        public boolean tryCaptureView(View child, int pointerId) {
+            return true;
+        }
+
+        @Override
+        public int clampViewPositionHorizontal(View child, int left, int dx) {
+            if(dx>0){
+                left=Math.min(getWidth()-child.getMeasuredWidth(),left);
+            }else{
+                left=Math.max(0,left);
+            }
+            return left;
+        }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            if(dy>0){
+                top=Math.min(getHeight()-child.getMeasuredHeight(),top);
+            }else{
+                top=Math.max(0,top);
+            }
+            return top;
+        }
+
+        @Override
+        public int getViewHorizontalDragRange(View child) {
+            return 10;
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return 10;
+        }
+
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            super.onViewReleased(releasedChild, xvel, yvel);
+            int pos=SearchIndex(releasedChild);
+            if(pos==-1)
+                return ;
+            removeView(releasedChild);
+            addView(releasedChild,pos);
+        }
+
+    };
+    public int SearchIndex(View c){
+        int x=c.getLeft();
+        int y=c.getTop();
+        int num=getChildCount();
+        int index=-1;
+        for(int i=0;i<num;i++){
+            View cc=getChildAt(i);
+            if(x>=cc.getLeft()&&y>=cc.getTop()){
+                if(x<=cc.getLeft()+cc.getMeasuredWidth()&&y<=cc.getTop()+cc.getMeasuredHeight())
+                {
+                    index=i;
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
+    @Override
+    public void computeScroll() {
+       if(help.continueSettling(true))
+           ViewCompat.postInvalidateOnAnimation(this);
+
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        help.processTouchEvent(ev);
+        return true;
+    }
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        return help.shouldInterceptTouchEvent(ev);
     }
 }
