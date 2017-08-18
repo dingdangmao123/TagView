@@ -1,5 +1,5 @@
 # TagView
- TagView is a simple android flow tag viewgroup
+ TagView is a simple android flow tag viewgroup.
  You can add new view when you provide strings and also drag the subordinate view 
  
 # snap
