@@ -19,6 +19,8 @@ public class Main extends AppCompatActivity {
             public void onClick(View v) {
                 TextView tv=(TextView)v;
                 Toast.makeText(Main.this,((TextView) v).getText().toString(),Toast.LENGTH_SHORT).show();
+                tag.removeView(v);
+                tag.addView(v,0);
             }
         });
         tag.addBefore(new TagView.before() {
