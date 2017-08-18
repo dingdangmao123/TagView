@@ -48,8 +48,8 @@
         });
         
         /*
-        addtag - add the tag
-        settag - set the tagthe former will be deleted）
+        addTag - add the tag
+        setTag - set the tagthe former will be deleted）
         */
         
         tag.addTag(new String[]{"java","c++","c#","Python"});
